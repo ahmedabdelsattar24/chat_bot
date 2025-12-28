@@ -1,0 +1,5 @@
+my-chatbot/
+├── api/
+│   └── chat.js          (Server-side logic)
+├── index.html           (Your frontend code)
+└── package.json         (Project settings)

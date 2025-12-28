@@ -1,0 +1,32 @@
+async function handleSend() {
+    const text = messageInput.value.trim();
+    if (!text) return;
+
+    addMessage(text, true);
+    messageInput.value = '';
+    sendButton.disabled = true;
+
+    showLoading();
+
+    try {
+        const response = await fetch('http://localhost:5678/webhook/9b61337a-cf44-4165-8038-b43d2e7e69a7', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        hideLoading();
+        addMessage(data.reply, false);
+    } catch (error) {
+        hideLoading();
+        addMessage("Sorry, I'm having trouble connecting to the server.", false);
+    } finally {
+        sendButton.disabled = false;
+        messageInput.focus();
+    }
+}
